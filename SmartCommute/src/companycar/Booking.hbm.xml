@@ -5,13 +5,15 @@
 
 <hibernate-mapping>
 
-    <class name="companycar.Car" table="CAR">
-        <id name="immatriculation" column="ID">
+    <class name="companycar.Booking" table="BOOKING">
+        <id name="id" column="ID">
         </id>
-        <property name="description"/>
-        <property name="numberOfSeats"/>
-        <property name="notes"/>
-        <property name="state"/>
+        
+        <property name="name"/>
+        <property name="start_time"/>
+        <property name="reason"/>
+        
+        <property name="IP"/>
 
     </class>
 

@@ -1,5 +1,8 @@
 package companycar;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtil;
@@ -9,6 +12,7 @@ public class CarManager {
 	public static void main(String[] args){
 		CarManager carDAO = new CarManager();
 		Car C=carDAO.createCar("XVF","Twingo noire",5);
+		carDAO.createCar("XXO","Renault Clio C4 rouge",5);
 	}
 
 	public Car createCar(String immatriculation,String description, Integer numberOfSeats){
@@ -23,6 +27,15 @@ public class CarManager {
 		T.commit();
 		return car;
 	}
+	
+	public List<Car> getAvailableCars(){
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction T = session.beginTransaction();
+		List<Car> list=session.createQuery("from CAR where NOT state="+Car.State.OUT_OF_ORDER.getCode()).list();
+		T.commit();
+		return list;
+	}
+	
 	
 	
 }

@@ -6,7 +6,7 @@
 <hibernate-mapping>
 
     <class name="companycar.Car" table="CAR">
-        <id name="immatriculation" column="PERSON_ID">
+        <id name="immatriculation" column="ID">
         </id>
         <property name="description"/>
         <property name="numberOfSeats"/>
