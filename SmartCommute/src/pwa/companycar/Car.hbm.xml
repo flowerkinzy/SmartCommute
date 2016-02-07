@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.sourceforge.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="pwa.companycar.Car" table="CAR">
+        <id name="immatriculation" column="ID">
+        </id>
+        <property name="description"/>
+        <property name="numberOfSeats"/>
+        <property name="notes"/>
+        <property name="state"/>
+
+    </class>
+
+</hibernate-mapping>
