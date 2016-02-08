@@ -8,13 +8,12 @@
     <class name="pwa.companycar.Booking" table="BOOKING">
         <id name="id" column="ID">
         </id>
-        
         <property name="name"/>
         <property name="start_time"/>
+        <property name="end_time"/>
         <property name="reason"/>
         
         <property name="IP"/>
-
     </class>
 
 </hibernate-mapping>

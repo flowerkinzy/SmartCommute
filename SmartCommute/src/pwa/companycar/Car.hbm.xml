@@ -11,8 +11,12 @@
         <property name="description"/>
         <property name="numberOfSeats"/>
         <property name="notes"/>
-        <property name="state"/>
-
+        <property name="stateCode" column="state"/>
+        <set name="bookings">
+	        <key column="carID" 
+	            not-null="true"/>
+	        <one-to-many class="pwa.companycar.Booking"/>
+    	</set>
     </class>
 
 </hibernate-mapping>

@@ -1,11 +1,23 @@
 package pwa.companycar;
+import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Car {
+	@XmlElement
 	private String immatriculation;
+	@XmlElement
 	private String description;
+	@XmlElement
 	private Integer numberOfSeats;
+	@XmlElement
 	private String notes;
-	private String state;
+	@XmlElement
+	private String stateCode;
+	
+	private Set<Booking> bookings;
 	
 	public Car(){
 		
@@ -44,11 +56,26 @@ public class Car {
 	}
 
 	public State getState() {
-		return State.get(state);
+		return State.get(stateCode);
+	}
+	public String getStateCode() {
+		return stateCode;
 	}
 
 	public void setState(State state) {
-		this.state = state.getCode();
+		this.stateCode = state.getCode();
+	}
+
+	public void setStateCode(String code) {
+		this.stateCode = code;
+	}
+	
+	public Set<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(Set<Booking> bookings) {
+		this.bookings = bookings;
 	}
 
 	public enum State{
@@ -74,6 +101,15 @@ public class Car {
 			}
 			return null;
 		}
+		public String toString(){
+			return label;
+			
+		}
 	};
+	public String toString(){
+		String S=this.immatriculation+" _ "+this.description+" ("+this.numberOfSeats+")  "+State.get(stateCode);
+		return S;
+	}
+
 
 }

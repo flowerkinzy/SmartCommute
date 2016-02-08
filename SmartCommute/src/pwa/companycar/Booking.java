@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Booking {
 	private Long id;
-	private Car car;
+	private String carID;
 	private String name;
 	private Date start_time;
 	private Date end_time;
@@ -23,13 +23,13 @@ public class Booking {
 		this.id = id;
 	}
 
-	public Car getCar() {
-		return car;
+	/*public String getCarID() {
+		return carID;
 	}
 
-	public void setCar(Car car) {
-		this.car = car;
-	}
+	public void setCarID(String carID) {
+		this.carID = carID;
+	}*/
 
 	public String getName() {
 		return name;
@@ -96,4 +96,8 @@ public class Booking {
 		}
 	};
 
+	public String toString(){
+		String S=this.carID+" pour "+this.name+" du "+this.start_time+" au "+this.end_time;
+		return S;
+	}
 }
