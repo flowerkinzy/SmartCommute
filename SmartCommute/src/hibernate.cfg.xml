@@ -34,7 +34,8 @@
 
         <mapping resource="pwa/companycar/Booking.hbm.xml"/>
         <mapping resource="pwa/companycar/Car.hbm.xml"/>
-
+		<mapping resource="pwa/sncf/Station.hbm.xml"/>
+		<mapping resource="pwa/velib/Station.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>

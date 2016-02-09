@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -70,7 +72,7 @@ public class BookingServlet extends HttpServlet {
 			
 		}
 		else if("addbooking".equals(request.getParameter("action"))){
-			DateFormat df=DateFormat.getDateTimeInstance();
+			SimpleDateFormat df=new SimpleDateFormat("YYYYMMDD-HHmm", Locale.getDefault());
 			try{
 				Date start=df.parse(request.getParameter("start"));
 				Date end=df.parse(request.getParameter("end"));
@@ -87,6 +89,24 @@ public class BookingServlet extends HttpServlet {
 								response.getWriter().append("Impossible d'ajouter cette réservation (Vérifier les données");
 							}
 						}
+					}
+				}else response.getWriter().append("Dates incorrectes");
+				
+			}catch(ParseException e){
+				response.getWriter().append("Dates incorrectes");
+			}		
+		}
+		else if("listavailablecar".equals(request.getParameter("action"))){
+			
+			SimpleDateFormat df=new SimpleDateFormat("YYYYMMDD-HHmm", Locale.getDefault());
+			try{
+				Date start=df.parse(request.getParameter("start"));
+				Date end=df.parse(request.getParameter("end"));
+				if(end.after(start)){
+					response.getWriter().append("Liste des véhicules dispo entre "+start+" et "+end+"\n");
+					List<Car> list=carManager.getAvailableCars(start, end);
+					for(Car C:list){
+						response.getWriter().append(C+"\n");
 					}
 				}else response.getWriter().append("Dates incorrectes");
 				

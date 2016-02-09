@@ -16,6 +16,8 @@ public class Car {
 	private String notes;
 	@XmlElement
 	private String stateCode;
+	@XmlElement
+	private Boolean inUse;
 	
 	private Set<Booking> bookings;
 	
@@ -70,6 +72,14 @@ public class Car {
 		this.stateCode = code;
 	}
 	
+	public Boolean getInUse() {
+		return inUse;
+	}
+
+	public void setInUse(Boolean inUse) {
+		this.inUse = inUse;
+	}
+
 	public Set<Booking> getBookings() {
 		return bookings;
 	}

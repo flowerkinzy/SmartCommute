@@ -12,6 +12,7 @@
         <property name="numberOfSeats"/>
         <property name="notes"/>
         <property name="stateCode" column="state"/>
+        <property name="inUse"/>
         <set name="bookings">
 	        <key column="carID" 
 	            not-null="true"/>
