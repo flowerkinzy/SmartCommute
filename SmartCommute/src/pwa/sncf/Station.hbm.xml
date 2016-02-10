@@ -3,8 +3,9 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.sourceforge.org/dtd/hibernate-mapping-3.0.dtd">
 
+
 <hibernate-mapping>
-    <class name="pwa.sncf.Train" table="TRAIN">
+    <class name="pwa.sncf.SncfGare" table="SNCFSTATION">
         <id name="uic">
         </id>
         <property name="nom" column="label"/>

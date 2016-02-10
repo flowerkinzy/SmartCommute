@@ -4,7 +4,7 @@
         "http://www.sourceforge.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="pwa.sncf.SncfGare" table="SNCFSTATION">
+    <class name="pwa.sncf.Train" table="TRAIN">
         <id name="id">
         </id>
         <property name="dateDepart"/>
@@ -13,3 +13,4 @@
     </class>
 
 </hibernate-mapping>
+
