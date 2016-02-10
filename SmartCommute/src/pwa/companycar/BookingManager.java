@@ -53,7 +53,7 @@ public class BookingManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
 		Timestamp now=new Timestamp(new Date().getTime());
-		List<Booking> list=session.createQuery("from Booking where end_time>"+now).list();
+		List<Booking> list=session.createQuery("from Booking where end_time>'"+now+"'").list();
 		T.commit();
 		return list;
 	}
@@ -70,7 +70,7 @@ public class BookingManager {
 		Transaction T = session.beginTransaction();
 		Timestamp startT = new Timestamp(start.getTime());
 		Timestamp endT = new Timestamp(start.getTime());
-		Integer count=(Integer) session.createQuery("SELECT COUNT(*) FROM BOOKING WHERE (start_time<="+startT+" AND end_time>"+startT+") OR (start_time<"+endT+" AND end_time>="+endT+") OR (start_time>="+startT+" AND end_time<="+endT).list().get(0);
+		Integer count=(Integer) session.createQuery("SELECT COUNT(*) FROM Booking WHERE (start_time<='"+startT+"' AND end_time>'"+startT+"') OR (start_time<'"+endT+"' AND end_time>='"+endT+"') OR (start_time>='"+startT+"' AND end_time<='"+endT+"')").list().get(0);
 		T.commit();
 		return (count>0);
 		

@@ -19,10 +19,34 @@
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>pwa.service</param-value>
          </init-param>
-      </servlet>
+    </servlet>
+    <servlet-mapping>
+    	<servlet-name>Jersey RESTful Application</servlet-name>
+   		<url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+   
+    <servlet>
+	   	<description>
+	   	</description>
+	   	<display-name>HomeServlet</display-name>
+	   	<servlet-name>HomeServlet</servlet-name>
+	   	<servlet-class>pwa.HomeServlet</servlet-class>
+    </servlet>  
    <servlet-mapping>
-   <servlet-name>Jersey RESTful Application</servlet-name>
-      <url-pattern>/rest/*</url-pattern>
+   	<servlet-name>HomeServlet</servlet-name>
+   	<url-pattern>/</url-pattern>
    </servlet-mapping>  
+   
+   <servlet>
+    	<description>
+    	</description>
+    	<display-name>SncfServlet</display-name>
+    	<servlet-name>SncfServlet</servlet-name>
+    	<servlet-class>pwa.sncf.SncfServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+   	<servlet-name>SncfServlet</servlet-name>
+   	<url-pattern>/sncf</url-pattern>
+   </servlet-mapping> 
    
 </web-app>

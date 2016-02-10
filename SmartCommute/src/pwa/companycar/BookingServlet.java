@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
 
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
@@ -37,9 +38,9 @@ public class BookingServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher=null;
 		// TODO Auto-generated method stub
 		logger.info("doGet : request="+request.getRequestURI());
-		response.getWriter().append("Served at: ").append(request.getContextPath()+"\n");
 		if("listcars".equals(request.getParameter("action"))){
 			response.getWriter().append("Liste de toutes les voitures\n");
 			List<Car> list=carManager.getAllCars();

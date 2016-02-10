@@ -27,6 +27,7 @@ public class CarManager {
 		car.setDescription(description);
 		car.setNumberOfSeats(numberOfSeats);
 		car.setState(Car.State.BOOKABLE_SAFE);
+		car.setInUse(Boolean.FALSE);
 		session.save(car);
 		T.commit();
 		return car;
@@ -45,7 +46,18 @@ public class CarManager {
 		Transaction T = session.beginTransaction();
 		Timestamp startT = new Timestamp(start.getTime());
 		Timestamp endT = new Timestamp(start.getTime());
-		List<Car> list=session.createQuery("from Car where NOT(state='O') AND (SELECT COUNT(*) FROM BOOKING WHERE (start_time<="+startT+" AND end_time>"+startT+") OR (start_time<"+endT+" AND end_time>="+endT+") OR (start_time>="+startT+" AND end_time<="+endT+")=0").list();
+		List<Car> list=session.createQuery("from Car where NOT(state='O') AND (SELECT COUNT(*) FROM Booking WHERE (start_time<='"+startT+"' AND end_time>'"+startT+"') OR (start_time<'"+endT+"' AND end_time>='"+endT+"') OR (start_time>='"+startT+"' AND end_time<='"+endT+"')=0").list();
+		T.commit();
+		return list;
+	}
+	
+	
+	public List<Car> getCurrentAvailableCars(){
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction T = session.beginTransaction();
+		Date date=new Date();
+		Timestamp now = new Timestamp(1000*60*(date.getTime()/(1000*60)));
+		List<Car> list=session.createQuery("from Car where NOT(state='O') AND inUse=0 AND (SELECT COUNT(*) FROM Booking WHERE (start_time<='"+now+"' AND end_time>='"+now+"'))=0").list();
 		T.commit();
 		return list;
 	}
@@ -56,6 +68,22 @@ public class CarManager {
 		List<Car> list=session.createQuery("from Car").list();
 		T.commit();
 		return list;
+	}
+	
+	public void useCar(Car c){
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction T = session.beginTransaction();
+		c.setInUse(Boolean.TRUE);
+		session.update(c);
+		T.commit();
+	}
+	
+	public void releaseCar(Car c){
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction T = session.beginTransaction();
+		c.setInUse(Boolean.FALSE);
+		session.update(c);
+		T.commit();
 	}
 	
 	public Car getCar(String immatriculation){
