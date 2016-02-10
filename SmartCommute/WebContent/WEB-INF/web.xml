@@ -37,16 +37,6 @@
    	<url-pattern>/</url-pattern>
    </servlet-mapping>  
    
-   <servlet>
-    	<description>
-    	</description>
-    	<display-name>SncfServlet</display-name>
-    	<servlet-name>SncfServlet</servlet-name>
-    	<servlet-class>pwa.sncf.SncfServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-   	<servlet-name>SncfServlet</servlet-name>
-   	<url-pattern>/sncf</url-pattern>
-   </servlet-mapping> 
+ 
    
 </web-app>

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /* Java 8
  * import java.util.Base64;
@@ -27,6 +28,8 @@ import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -43,7 +46,7 @@ import sun.misc.BASE64Encoder;
 @WebServlet("/sncf")
 public class SncfServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private Logger logger=LoggerFactory.logger(getClass());
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -56,7 +59,7 @@ public class SncfServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SncfGare gare= new SncfGare();
+		SncfGare gare= new SNCFGareManager().UICToGare("87384008");
 		URL url = new URL("http://api.transilien.com/gare/87384008/depart/");
 		//String encoding = Base64.getEncoder().encodeToString("tnhtn394:LgS43b5m".getBytes("utf-8")); //Java 8
 		String encoding = DatatypeConverter.printBase64Binary("tnhtn394:LgS43b5m".getBytes("utf-8"));
@@ -72,20 +75,22 @@ public class SncfServlet extends HttpServlet {
 			db = dbf.newDocumentBuilder();
 			Document doc = db.parse(connexion.getInputStream());
 		
-		  List<Train> trains = new ArrayList<Train>();     
+		  HashSet<Train> trains = new HashSet<Train>();     
 		  NodeList fils = doc.getElementsByTagName("train");
 		  for (int tmp = 0; tmp < fils.getLength(); tmp++) {      
 		    Node nNode = fils.item(tmp);
 		    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 		      Element eElement = (Element)nNode;        
 		      Train t = new Train();               
-		      t.setDateDepart(new SimpleDateFormat("dd/MM/yyyy       HH:mm").parse(eElement.getElementsByTagName("date").item(0).getTextContent()));
+		      t.setDateDepart(new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(eElement.getElementsByTagName("date").item(0).getTextContent()));
 		      t.setNom(eElement.getElementsByTagName("miss").item(0).getTextContent());
+		      
 		      trains.add(t);
 		      
-		      gare.setTrains(trains);
+		      
 		    }
 		  }
+		  gare.setTrains(trains);
 		} catch (DOMException e) {
 				e.printStackTrace();
 		} catch (ParseException e) {
@@ -95,13 +100,11 @@ public class SncfServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		  
-		response.getWriter().append("Served at: ").append(request.getContextPath());  
 		
-		for(int i=0;i<gare.getTrains().size();i++){
+		for(Train train:gare.getTrains()){
 			  //System.out.println(gare.getNom());
 			  //System.out.println(gare.getTrains().get(i).getDateDepart());
-			  response.getWriter().append(gare.getNom()+"<br/>"+gare.getTrains().get(i).getDateDepart());
+			  response.getWriter().append(gare.getNom()+"\t"+train+"\n");
 		  }
 		    
 		
