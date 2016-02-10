@@ -2,14 +2,18 @@ package pwa.sncf;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 public class SncfGare {
 private String nom;
 private long uic;
-private List<Train> trains;
+private Boolean proximite;
+private Integer timeToReach;
+private Set<Train> trains;
+
 public SncfGare(){
-	trains=new Vector<Train>();
+
 }
 
 public String getNom() {
@@ -28,11 +32,28 @@ public void setUic(long uic) {
 	this.uic = uic;
 }
 
-public List<Train> getTrains() {
+public Set<Train> getTrains() {
 	return trains;
 }
 
-public void setTrains(List<Train> trains) {
+public void setTrains(Set<Train> trains) {
 	this.trains = trains;
 }
+
+public Boolean getProximite() {
+	return proximite;
+}
+
+public void setProximite(Boolean proximite) {
+	this.proximite = proximite;
+}
+
+public Integer getTimeToReach() {
+	return timeToReach;
+}
+
+public void setTimeToReach(Integer timeToReach) {
+	this.timeToReach = timeToReach;
+}
+
 }

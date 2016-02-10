@@ -4,11 +4,16 @@
         "http://www.sourceforge.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="pwa.sncf.Station" table="SNCF_STATION">
-        <id name="ID">
+    <class name="pwa.sncf.Train" table="TRAIN">
+        <id name="uic">
         </id>
-        <property name="name"/>
-        <property name="timeToReach"/>
+        <property name="nom" column="label"/>
+        <property name="proximite"/>
+        <property name="timeToReach" column="tempsDeMarche"/>
+        <set name="trains">
+	        <key column="arriveeID"/>
+	        <one-to-many class="pwa.sncf.Train"/>
+    	</set>
     </class>
 
 </hibernate-mapping>

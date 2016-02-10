@@ -13,11 +13,6 @@ import util.HibernateUtil;
 
 public class CarManager {
 	
-	public static void main(String[] args){
-		CarManager carDAO = new CarManager();
-		Car C=carDAO.createCar("XVF","Twingo noire",5);
-		carDAO.createCar("XXO","Renault Clio C4 rouge",5);
-	}
 
 	public Car createCar(String immatriculation,String description, Integer numberOfSeats){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
