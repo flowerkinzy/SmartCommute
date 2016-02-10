@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.sourceforge.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="pwa.sncf.SncfGare" table="SNCFSTATION">
+        <id name="id">
+        </id>
+        <property name="dateDepart"/>
+        <property name="nom"/>
+        <property name="etat"/>
+    </class>
+
+</hibernate-mapping>
