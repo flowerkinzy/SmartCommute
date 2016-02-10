@@ -18,6 +18,10 @@ import javax.servlet.RequestDispatcher;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 
+
+
+import pwa.sncf.SncfGare;
+
 /**
  * Servlet implementation class BookingServlet
  */
@@ -97,33 +101,61 @@ public class BookingServlet extends HttpServlet {
 				response.getWriter().append("Dates incorrectes");
 			}		
 		}
-		else if("listavailablecar".equals(request.getParameter("action"))){
+		else if("listavailablecars".equals(request.getParameter("action"))){
+			if(request.getParameter("start")!=null && request.getParameter("end")!=null){
 			
-			SimpleDateFormat df=new SimpleDateFormat("YYYYMMDD-HHmm", Locale.getDefault());
+			SimpleDateFormat df=new SimpleDateFormat("dd/MM/YYYY HH:mm");
 			try{
-				Date start=df.parse(request.getParameter("start"));
-				Date end=df.parse(request.getParameter("end"));
+				//Date start=df.parse(request.getParameter("start"));
+				//Date end=df.parse(request.getParameter("end"));
+				String startdate=request.getParameter("start").substring(0, request.getParameter("start").indexOf(" "));
+				int starttimehour=Integer.parseInt(request.getParameter("start").substring(request.getParameter("start").indexOf(" ")+1,request.getParameter("start").indexOf(":")));
+				int starttimemin=Integer.parseInt(request.getParameter("start").substring(request.getParameter("start").indexOf(":")+1));
+				String enddate=request.getParameter("end").substring(0, request.getParameter("end").indexOf(" "));
+				int endtimehour=Integer.parseInt(request.getParameter("end").substring(request.getParameter("end").indexOf(" ")+1,request.getParameter("end").indexOf(":")));
+				int endtimemin=Integer.parseInt(request.getParameter("end").substring(request.getParameter("end").indexOf(":")+1));
+				logger.info("startdate "+startdate+ " /time="+starttimehour+"+"+starttimemin+"\n");
+				logger.info("enddate="+enddate+ " /time="+endtimehour+"+"+endtimemin+"\n");
+				Date start=DateFormat.getDateInstance(DateFormat.SHORT).parse(startdate);
+				start.setTime(start.getTime()+((starttimehour*60)+starttimemin)*(60*1000));
+				Date end=DateFormat.getDateInstance(DateFormat.SHORT).parse(enddate);
+				end.setTime(end.getTime()+((endtimehour*60)+endtimemin)*(60*1000));
 				if(end.after(start)){
 					response.getWriter().append("Liste des véhicules dispo entre "+start+" et "+end+"\n");
 					List<Car> list=carManager.getAvailableCars(start, end);
 					for(Car C:list){
 						response.getWriter().append(C+"\n");
 					}
-				}else response.getWriter().append("Dates incorrectes");
+				}else response.getWriter().append("Dates incorrectes: "+start+" - "+end);
 				
 			}catch(ParseException e){
 				response.getWriter().append("Dates incorrectes");
+				e.printStackTrace();
 			}
-			
+			catch(Exception e){
+				
+				e.printStackTrace();
+			}
+			}else{
+				List<Car> list=carManager.getCurrentAvailableCars();
+				for(Car C:list){
+					response.getWriter().append(C+"\n");
+				}
+			}
+		
 				
 			
 			
 		}
-		else{
+		else if("listbookablecars".equals(request.getParameter("action"))){
 			List<Car> list=carManager.getBookableCars();
 			for(Car C:list){
 				response.getWriter().append(C+"\n");
 			}
+		}
+		else{
+			dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/Reservation.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 

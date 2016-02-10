@@ -4,6 +4,7 @@ package pwa.companycar;
 import java.util.Date;
 import java.util.List;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -15,7 +16,7 @@ import util.HibernateUtil;
 public class BookingManager {
 
 	private Logger logger=LoggerFactory.logger(getClass());
-	
+	private SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public Booking create(String name,Car car, Date start, Date end, String reason,String IP){
 		if(isCarBooked(car, start, end))return null;
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -52,7 +53,7 @@ public class BookingManager {
 	public List<Booking> listPendingBookings(){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
-		Timestamp now=new Timestamp(new Date().getTime());
+		String now=df.format(new Date());
 		List<Booking> list=session.createQuery("from Booking where end_time>'"+now+"'").list();
 		T.commit();
 		return list;
@@ -68,8 +69,8 @@ public class BookingManager {
 	public boolean isCarBooked(Car c, Date start,Date end){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
-		Timestamp startT = new Timestamp(start.getTime());
-		Timestamp endT = new Timestamp(start.getTime());
+		String startT=df.format(start);
+		String endT=df.format(end);
 		Integer count=(Integer) session.createQuery("SELECT COUNT(*) FROM Booking WHERE (start_time<='"+startT+"' AND end_time>'"+startT+"') OR (start_time<'"+endT+"' AND end_time>='"+endT+"') OR (start_time>='"+startT+"' AND end_time<='"+endT+"')").list().get(0);
 		T.commit();
 		return (count>0);

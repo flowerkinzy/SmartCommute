@@ -1,6 +1,7 @@
 package pwa;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 
 import pwa.companycar.BookingManager;
+import pwa.companycar.Car;
 import pwa.companycar.CarManager;
 import pwa.sncf.SNCFGareManager;
 import pwa.sncf.SncfGare;
@@ -41,10 +43,10 @@ public class HomeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/Accueil.jsp");
-		request.setAttribute("availablecars",carManager.getCurrentAvailableCars());
+		List<Car>cars=carManager.getCurrentAvailableCars();
+		request.setAttribute("availablecars",cars);
 		
-		SncfGare G=gareManager.UICToGare("87384008");
-		request.setAttribute("nextTrains", trainManager.prochainsTrains(G));
+		request.setAttribute("nextTrains", trainManager.prochainsTrainsToutesGaresProches(5));
 		request.setAttribute("listOfstations", 0);
 		dispatcher.forward(request, response);
 	}

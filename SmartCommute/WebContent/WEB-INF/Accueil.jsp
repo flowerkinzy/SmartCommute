@@ -8,7 +8,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/asserts/css/main.css" />
+		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/asserts/css/main.css" />
 		
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
@@ -31,6 +31,7 @@
 				<i class="icon fa-diamond"></i>
 				<h2>RymFlora entreprise</h2>
 				
+				
 			</section>
 
 		<!-- One -->
@@ -41,7 +42,7 @@
 			<section id="one" class="wrapper style1">
 				<div class="inner">
 					<article class="feature left">
-						<span class="image"><img src="images/car.jpg" alt="" /></span>
+						<span class="image"><img src="images/car.jpg" alt="Cars" /></span>
 						<div class="content">
 							<h2>Available Cars </h2>
 							<ul>
@@ -58,7 +59,7 @@
 						</div>
 					</article>
 					<article class="feature right">
-						<span class="image"><img src="images/velib.jpg" alt="" /></span>
+						<span class="image"><img src="images/velib.jpg" alt="Velibs" /></span>
 						<div class="content">
 							<h2>Nierest Velib Stations</h2>
 							<ul>
@@ -91,7 +92,7 @@
 		HashSet<Train> trains=(HashSet<Train>)request.getAttribute("nextTrains");
 		%>		
 					<article class="feature left">
-						<span class="image"><img src="images/sncf.jpg" alt="" /></span>
+						<span class="image"><img src="images/sncf.jpg" alt="SNCF" /></span>
 						<div class="content">
 							<h2>SNCF </h2>
 							<ul>
@@ -122,11 +123,12 @@
 			</footer>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="assets/js/main.js"></script>
+			<script src="/asserts/js/jquery.min.js"></script>
+			<script src="/asserts/js/jquery.min.js"></script>
+			<script src="/asserts/js/skel.min.js"></script>
+			<script src="/asserts/js/util.js"></script>
+			<!--[if lte IE 8]><script src="asserts/js/ie/respond.min.js"></script><![endif]-->
+			<script src="asserts/js/main.js"></script>
 
 	</body>
 </html>

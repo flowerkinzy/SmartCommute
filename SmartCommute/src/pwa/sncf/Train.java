@@ -10,6 +10,7 @@ private String nom;
 private String etat;
 public Boolean tempsReel=true;
 private Long arriveeId;
+private Long departId;
 
 public Integer getId() {
 	return id;
@@ -43,6 +44,13 @@ public void setArriveeId(Long arriveeId) {
 	this.arriveeId = arriveeId;
 }
 
+public Long getDepartId() {
+	return departId;
+}
+public void setDepartId(Long departId) {
+	this.departId = departId;
+}
+
 public enum Etat{
 	NORMAL(null,""),
 	RETARDE("R", "Retardé"),
@@ -73,17 +81,23 @@ public long getTempsAttenteEnMin(){
 
 public String toString(){
 	SimpleDateFormat df=new SimpleDateFormat("HH:mm");
-	String depart=df.format(getDateDepart());
+	String time=df.format(getDateDepart());
 	
-	String arrivee="";
+	String arrivee="", depart="";
 	if(arriveeId!=null){
 		SncfGare G;
 		SNCFGareManager gareManager=new SNCFGareManager();
 		G = gareManager.UICToGare(this.arriveeId);
 		if(G!=null)arrivee=G.getNom();
 	}
+	if(departId!=null){
+		SncfGare G;
+		SNCFGareManager gareManager=new SNCFGareManager();
+		G = gareManager.UICToGare(this.departId);
+		if(G!=null)depart=G.getNom();
+	}
 	
-	String S=nom+"\t"+depart+"\t"+arrivee+"\t"+Etat.get(etat);
+	String S="Gare de "+depart+"\t\t||\t\t"+nom+"\t"+time+"\t"+arrivee+"\t"+Etat.get(etat);
 	return S;
 }
 

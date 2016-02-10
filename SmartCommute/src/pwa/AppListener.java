@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -34,6 +35,7 @@ public class AppListener implements ServletContextListener {
      */
     public AppListener() {
         // TODO Auto-generated constructor stub
+    	
     }
 
 	/**
@@ -43,6 +45,9 @@ public class AppListener implements ServletContextListener {
          // TODO Auto-generated method stub
     	
     	peuplerSiBesoinTable();
+    	ServletContext sc = arg0.getServletContext();
+        sc.setAttribute("ctx", sc.getContextPath());
+        logger.info("ServletContextPath "+sc.getContextPath()+"\n");
     	
     }
 
@@ -77,7 +82,7 @@ public class AppListener implements ServletContextListener {
             		File fichier = (File) ctx.lookup("SNCFStation.sql");
             		logger.info("Fichier SQL: "+fichier.getAbsolutePath());
         			logger.info("Chargement de la table des stations (1min)");
-        			
+        			ctx.close();
     				FileReader reader=new FileReader(fichier);
     				char[] chars=null;
     				int code;

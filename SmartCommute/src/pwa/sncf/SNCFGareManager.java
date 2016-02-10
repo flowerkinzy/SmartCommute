@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -57,7 +58,14 @@ public class SNCFGareManager {
 		peuplerSiBesoinTable();
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
-		List<SncfGare> gares=session.createQuery("from SncfGare where proximite=1 distinct label").list();
+		List<SncfGare> gares=new ArrayList<SncfGare>();
+		List<Long> uics=session.createQuery("select min(uic) from SncfGare where proximite=1 group by label").list();
+		logger.info(uics.size()+ "gares de proximité trouvées\n");
+		if(uics!=null){
+			for(Long uic:uics){
+				gares.add(this.UICToGare(uic));
+			}	
+		}
 		T.commit();
 		return gares;
 	}
@@ -70,7 +78,7 @@ public class SNCFGareManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
 		SncfGare gare=null;
-		Long count=(Long) session.createQuery("select count(*) from SncfGare where uic="+uic).list().get(0);
+		Long count=(Long) session.createQuery("select count(*) from SncfGare where uic="+uic).uniqueResult();
 		if(count>0){
 			gare=session.load(SncfGare.class,uic);	
 			
