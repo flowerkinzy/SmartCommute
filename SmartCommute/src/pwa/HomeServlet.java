@@ -13,6 +13,9 @@ import org.jboss.logging.Logger;
 
 import pwa.companycar.BookingManager;
 import pwa.companycar.CarManager;
+import pwa.sncf.SNCFGareManager;
+import pwa.sncf.SncfGare;
+import pwa.sncf.TrainManager;
 
 /**
  * Servlet implementation class HomeServlet
@@ -20,7 +23,9 @@ import pwa.companycar.CarManager;
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	BookingManager bookingManager=new BookingManager();
-	CarManager carManager=new CarManager();   
+	CarManager carManager=new CarManager();  
+	TrainManager trainManager=new TrainManager();
+	SNCFGareManager gareManager = new SNCFGareManager();
 	private Logger logger=LoggerFactory.logger(getClass());
        
     /**
@@ -37,7 +42,9 @@ public class HomeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/Accueil.jsp");
 		request.setAttribute("availablecars",carManager.getCurrentAvailableCars());
-		request.setAttribute("nextTrains", 0);
+		
+		SncfGare G=gareManager.UICToGare("87384008");
+		request.setAttribute("nextTrains", trainManager.prochainsTrains(G));
 		request.setAttribute("listOfstations", 0);
 		dispatcher.forward(request, response);
 	}

@@ -18,7 +18,7 @@
 		<%@ page 	
 			import="java.util.*"
 			import="pwa.companycar.Car"
-			
+			import="pwa.sncf.Train"
 		 %>
 
 		<!-- Header -->
@@ -86,14 +86,26 @@
 							</ul>							
 						</div>
 					</article>
-					
+			<%
+		
+		HashSet<Train> trains=(HashSet<Train>)request.getAttribute("nextTrains");
+		%>		
 					<article class="feature left">
 						<span class="image"><img src="images/sncf.jpg" alt="" /></span>
 						<div class="content">
 							<h2>SNCF </h2>
 							<ul>
-								  <li>Nom du train1--terminus--Datedepart</li>
-  								  <li>Nom du train2--terminus--Datedepart</li>
+							    <%
+							    if(trains!=null){
+									for(Train train:trains){
+										out.write("<li>"+train+"</li>");
+									}
+							    }
+							    else{
+							    	out.write("<p>Aucune information</p>");
+							    }
+							    
+								%>
   								  
 							</ul>							
 						</div>

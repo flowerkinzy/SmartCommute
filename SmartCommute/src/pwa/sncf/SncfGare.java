@@ -56,4 +56,8 @@ public void setTimeToReach(Integer timeToReach) {
 	this.timeToReach = timeToReach;
 }
 
+public boolean equals(SncfGare G){
+	return this.uic==G.uic;
+}
+
 }

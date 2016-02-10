@@ -8,6 +8,8 @@ private Integer id;
 private Date dateDepart;
 private String nom;
 private String etat;
+public Boolean tempsReel=true;
+private Long arriveeId;
 
 public Integer getId() {
 	return id;
@@ -32,6 +34,13 @@ public String getEtat() {
 }
 public void setEtat(String etat) {
 	this.etat = etat;
+}
+
+public Long getArriveeId() {
+	return arriveeId;
+}
+public void setArriveeId(Long arriveeId) {
+	this.arriveeId = arriveeId;
 }
 
 public enum Etat{
@@ -65,11 +74,21 @@ public long getTempsAttenteEnMin(){
 public String toString(){
 	SimpleDateFormat df=new SimpleDateFormat("HH:mm");
 	String depart=df.format(getDateDepart());
-	String S=nom+"\t"+depart+"\t"+Etat.get(etat);
+	
+	String arrivee="";
+	if(arriveeId!=null){
+		SncfGare G;
+		SNCFGareManager gareManager=new SNCFGareManager();
+		G = gareManager.UICToGare(this.arriveeId);
+		if(G!=null)arrivee=G.getNom();
+	}
+	
+	String S=nom+"\t"+depart+"\t"+arrivee+"\t"+Etat.get(etat);
 	return S;
 }
 
 public boolean equals(Train T){
 	return this.id==T.id;
 }
+
 }

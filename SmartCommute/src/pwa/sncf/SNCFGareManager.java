@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
@@ -62,15 +63,26 @@ public class SNCFGareManager {
 	}
 	
 	public SncfGare UICToGare(String uic){
-		peuplerSiBesoinTable();
+		return UICToGare(Long.parseLong(uic));		
+	}
+	
+	public SncfGare UICToGare(Long uic){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
-		List<SncfGare> gares=session.createQuery("from SncfGare where uic="+Long.parseLong(uic)).list();
-		if(gares.isEmpty()){
-			logger.info("Pas de gare trouvée de UIC="+uic);
-			return null;
+		SncfGare gare=null;
+		Long count=(Long) session.createQuery("select count(*) from SncfGare where uic="+uic).list().get(0);
+		if(count>0){
+			gare=session.load(SncfGare.class,uic);	
+			
 		}
-		else return gares.get(0);		
+		if(gare==null)logger.error("Pas de gare trouvée de UIC="+uic+"\n");
+		else {
+			logger.info("La gare d'UIC="+uic+" est "+gare.getNom()+"\n");
+			session.update(gare);
+		}
+		T.commit();
+		return gare;
+	
 	}
 	
 	private void peuplerSiBesoinTable(){
