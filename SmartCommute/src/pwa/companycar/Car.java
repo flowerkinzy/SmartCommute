@@ -1,4 +1,5 @@
 package pwa.companycar;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -23,7 +24,7 @@ public class Car {
 	private Set<Booking> bookings;
 	
 	public Car(){
-		
+		bookings=new HashSet<Booking>();
 	}
 	
 	public String getImmatriculation() {

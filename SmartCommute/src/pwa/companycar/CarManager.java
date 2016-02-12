@@ -1,16 +1,12 @@
 package pwa.companycar;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.hibernate.type.DateType;
 import org.jboss.logging.Logger;
 
 import util.HibernateUtil;
@@ -47,7 +43,7 @@ public class CarManager {
 		Transaction T = session.beginTransaction();
 		String startT=df.format(start);
 		String endT=df.format(end);
-		List<Car> list=session.createQuery("from Car where NOT(state='O') AND ((SELECT COUNT(*) FROM Booking WHERE (start_time<='"+startT+"' AND end_time>'"+startT+"') OR (start_time<'"+endT+"' AND end_time>='"+endT+"') OR (start_time>='"+startT+"' AND end_time<='"+endT+"'))=0)").list();
+		List<Car> list=session.createQuery("from Car C  where NOT(state='O') AND C.immatriculation NOT IN (SELECT car.immatriculation FROM Booking WHERE (start_time<='"+startT+"' AND end_time>'"+startT+"') OR (start_time<'"+endT+"' AND end_time>='"+endT+"') OR (start_time>='"+startT+"' AND end_time<='"+endT+"'))").list();
 		logger.info("Nb véhicules disponibles sur cette période "+list.size()+"\n");
 		T.commit();
 		return list;
@@ -58,7 +54,7 @@ public class CarManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
 		String now=df.format(new Date());
-		List<Car> list=session.createQuery("from Car where NOT(state='O') AND inUse=0 AND ((SELECT COUNT(*) FROM Booking WHERE (start_time<='"+now+"' AND end_time>='"+now+"'))=0)").list();
+		List<Car> list=session.createQuery("from Car C where NOT(state='O') AND inUse=0 AND  C.immatriculation NOT IN (SELECT car.immatriculation FROM Booking WHERE (start_time<='"+now+"' AND end_time>='"+now+"'))").list();
 		logger.info("Nb véhicules disponibles actuellement "+list.size()+"\n");
 		T.commit();
 		return list;
@@ -89,12 +85,12 @@ public class CarManager {
 	}
 	
 	public Car getCar(String immatriculation){
+		Car C=null;
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
-		Iterator<Car> it = session.createQuery("from Car where ID='"+immatriculation+"'").iterate();
+		C = (Car) session.createQuery("from Car where ID='"+immatriculation+"'").uniqueResult();
 		T.commit();
-		if(it.hasNext())return it.next();
-		else return null;
+		return C;
 		
 	}
 	

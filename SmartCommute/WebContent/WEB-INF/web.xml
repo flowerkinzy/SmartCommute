@@ -35,10 +35,25 @@
 	   	<servlet-name>HomeServlet</servlet-name>
 	   	<servlet-class>pwa.HomeServlet</servlet-class>
     </servlet>  
+    
    <servlet-mapping>
    	<servlet-name>HomeServlet</servlet-name>
    	<url-pattern>/home</url-pattern>
    </servlet-mapping>  
+   
+   <servlet>
+	   	<description>
+	   	</description>
+	   	<display-name>AdminServlet</display-name>
+	   	<servlet-name>AdminServlet</servlet-name>
+	   	<servlet-class>pwa.AdminServlet</servlet-class>
+    </servlet>  
+    
+   <servlet-mapping>
+   	<servlet-name>AdminServlet</servlet-name>
+   	<url-pattern>/admin</url-pattern>
+   </servlet-mapping>  
+   
    <welcome-file-list>
        <welcome-file>index.html</welcome-file>
        <welcome-file>index.jsp</welcome-file>

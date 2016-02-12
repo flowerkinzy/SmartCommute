@@ -1,15 +1,8 @@
 package pwa.sncf;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
@@ -98,7 +91,7 @@ public class SNCFGareManager {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
 		try{
-			Long result = (Long) session.createQuery("select count(*) from SncfGare").list().get(0);
+			Long result = (Long) session.createQuery("select count(*) from SncfGare").list().uniqueResult();
 			if(result>0)return;
 		}finally{
 			logger.info("Chargement de la table des stations (2min)");

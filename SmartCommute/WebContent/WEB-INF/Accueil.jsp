@@ -7,6 +7,7 @@
 		<title>Smart transport</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<META HTTP-EQUIV="Refresh" CONTENT="30">
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/asserts/css/main.css" />
 		
@@ -19,6 +20,7 @@
 			import="java.util.*"
 			import="pwa.companycar.Car"
 			import="pwa.sncf.Train"
+			import="pwa.velib.Station"
 		 %>
 
 		<!-- Header -->
@@ -44,7 +46,7 @@
 					<article class="feature left">
 						<span class="image"><img src="images/car.jpg" alt="Cars" /></span>
 						<div class="content">
-							<h2>Available Cars </h2>
+							<h2>Véhicules disponibles </h2>
 							<ul>
 							<%
 								for(Car car:cars){
@@ -58,31 +60,25 @@
 							
 						</div>
 					</article>
+					
+					<%
+		
+		List<Station> Vstations=(List<Station>)request.getAttribute("listOfStations");
+		%>
 					<article class="feature right">
 						<span class="image"><img src="images/velib.jpg" alt="Velibs" /></span>
 						<div class="content">
-							<h2>Nierest Velib Stations</h2>
+							<h2>Points Vélib à proximité</h2>
 							<ul>
-								  <li>Sation XX 
-								  	<ul>
-								  		<li>Etat</li>
-  								  		<li>Nom</li>
-  								  		<li>adresse</li>
-  								  		<li>Station bonus</li>
-  								  		<li>Etat du terminal de paiement par carte</li>
-									</ul>
+								  <%
+								  if(Vstations!=null){
+								for(Station station:Vstations){
+									out.write("<li>"+station+"</li>");
+								}
+								  }
+							%>
 								  
-								  </li>
-								  <li>Sation YY 
-								  	<ul>
-								  		<li>Etat</li>
-  								  		<li>Nom</li>
-  								  		<li>adresse</li>
-  								  		<li>Station bonus</li>
-  								  		<li>Etat du terminal de paiement par carte</li>
-									</ul>
-								  
-							      </li>
+
   								  
 							</ul>							
 						</div>

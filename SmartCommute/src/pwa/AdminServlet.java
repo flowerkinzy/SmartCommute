@@ -12,31 +12,29 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 
+import pwa.companycar.Booking;
 import pwa.companycar.BookingManager;
 import pwa.companycar.Car;
 import pwa.companycar.CarManager;
 import pwa.sncf.SNCFGareManager;
 import pwa.sncf.SncfGare;
 import pwa.sncf.TrainManager;
-import pwa.velib.Position;
-import pwa.velib.VelibStationManager;
 
 /**
  * Servlet implementation class HomeServlet
  */
-public class HomeServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	BookingManager bookingManager=new BookingManager();
 	CarManager carManager=new CarManager();  
 	TrainManager trainManager=new TrainManager();
 	SNCFGareManager gareManager = new SNCFGareManager();
-	private VelibStationManager velibManager = new VelibStationManager();
 	private Logger logger=LoggerFactory.logger(getClass());
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public HomeServlet() {
+    public AdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,13 +43,22 @@ public class HomeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/Accueil.jsp");
-		List<Car>cars=carManager.getCurrentAvailableCars();
-		request.setAttribute("availablecars",cars);
-		
-		request.setAttribute("nextTrains", trainManager.prochainsTrainsToutesGaresProches(5));
-		request.setAttribute("listOfStations", velibManager.listeStationsProchesTriées(new Position(48.9094606,2.4543440), 0.18,3));
+		RequestDispatcher dispatcher =null;
+		if("cancelbookings".equals(request.getParameter("action"))){
+			dispatcher=this.getServletContext().getRequestDispatcher("/WEB-INF/views/BookingsToCancel.jsp");
+			List<Booking> bookings =bookingManager.listAllBookings();
+			request.setAttribute("bookings",bookings);
+			dispatcher.forward(request, response);
+		}else if("cancelbooking".equals(request.getParameter("action"))){
+			if(request.getParameter("id")==null)response.getWriter().append("Pas d'id renseigné");
+			else{
+			bookingManager.cancel(Long.parseLong(request.getParameter("id")));
+			response.sendRedirect("admin?action=cancelbookings");
+			}
+		}
+		dispatcher=this.getServletContext().getRequestDispatcher("/WEB-INF/Administration.jsp");
 		dispatcher.forward(request, response);
+		
 	}
 
 	/**

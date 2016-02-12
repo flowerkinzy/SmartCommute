@@ -6,6 +6,7 @@ import java.util.List;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
@@ -23,16 +24,17 @@ public class BookingManager {
 		Transaction T = session.beginTransaction();
 		Booking booking = new Booking();
 		booking.setName(name);
-		//booking.setCarID(car.getImmatriculation());
-		booking.setStart_time(start);
-		booking.setEnd_time(end);
-		booking.setReason(reason);
-		booking.setIP(IP);
-		//TODO check time
-		session.save(booking);
+		
 		try{
-		car.getBookings().add(booking);
-		session.update(car);
+			booking.setStart_time(start);
+			booking.setEnd_time(end);
+			booking.setReason(reason);
+			booking.setIP(IP);
+			booking.setCar(car);
+	
+			//TODO check time;
+			booking.setId((Long) session.save(booking));
+			Hibernate.initialize(booking.getCar());
 		}catch(Exception e){
 			logger.error("Impossible d'enregistrer la réservation");
 			e.printStackTrace();
@@ -66,12 +68,23 @@ public class BookingManager {
 		T.commit();
 	}
 	
+	public void cancel(Long id){
+		cancel(get(id));
+	}
+	
+	public Booking get(Long id){
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction T = session.beginTransaction();
+		Booking B = session.load(Booking.class, id);
+		T.commit();
+		return B;
+	}
 	public boolean isCarBooked(Car c, Date start,Date end){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction T = session.beginTransaction();
 		String startT=df.format(start);
 		String endT=df.format(end);
-		Integer count=(Integer) session.createQuery("SELECT COUNT(*) FROM Booking WHERE (start_time<='"+startT+"' AND end_time>'"+startT+"') OR (start_time<'"+endT+"' AND end_time>='"+endT+"') OR (start_time>='"+startT+"' AND end_time<='"+endT+"')").list().get(0);
+		Long count=(Long) session.createQuery("SELECT COUNT(*) FROM Booking WHERE (start_time<='"+startT+"' AND end_time>'"+startT+"') OR (start_time<'"+endT+"' AND end_time>='"+endT+"') OR (start_time>='"+startT+"' AND end_time<='"+endT+"')").uniqueResult();
 		T.commit();
 		return (count>0);
 		

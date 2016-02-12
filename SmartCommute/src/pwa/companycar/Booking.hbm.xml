@@ -7,7 +7,11 @@
 
     <class name="pwa.companycar.Booking" table="BOOKING">
         <id name="id" column="ID">
+            <generator class="native"/>
         </id>
+        <many-to-one name="car" class="pwa.companycar.Car" lazy="false">
+            <column name="carID" />
+        </many-to-one>
         <property name="name"/>
         <property name="start_time"/>
         <property name="end_time"/>

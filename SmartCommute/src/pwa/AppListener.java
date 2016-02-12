@@ -63,7 +63,7 @@ public class AppListener implements ServletContextListener {
     		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
     		Transaction T = session.beginTransaction();
     		try{
-    			Long result = (Long) session.createQuery("select count(*) from SncfGare").list().get(0);
+    			Long result = (Long) session.createQuery("select count(*) from SncfGare").uniqueResult();
     			logger.info("Nombre de gares trouvées "+result);
     			//if(result>0)return;
     		}catch(Exception e){

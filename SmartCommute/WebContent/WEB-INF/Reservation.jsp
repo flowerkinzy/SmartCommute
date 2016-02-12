@@ -15,35 +15,35 @@
 <input type="hidden" name="action" value="listavailablecars">
               <table width="250" border="0" align="center" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td colspan="3" style="padding-bottom:15px;" class="wrapper style1" id="banner"><h2 align="center">Book your car</h2> </td>
+                  <td colspan="3" style="padding-bottom:15px;padding-top:0;" class="wrapper style1" id="banner"><h2 align="center">Faire une réservation</h2> </td>
                 </tr>
                 <tr>
-                  <td width="89" height="25" class="body">First Name : </td>
-				  <td height="25" colspan="2"><input type="text" name="firstname" style="width:155px;"></td>
+                  <td width="89" height="25" class="body">Prénom : </td>
+				  <td height="25" colspan="2"><input type="text" name="firstname" style="width:200px;"></td>
 				</tr>
 				<tr>
-                  <td width="89" height="25" class="body">Last Name : </td>
-				  <td height="25" colspan="2"><input type="text" name="lastname" style="width:155px;"></td>
+                  <td width="89" height="25" class="body">Nom : </td>
+				  <td height="25" colspan="2"><input type="text" name="lastname" style="width:200px;"></td>
 				</tr>
                  
                 <tr>
-                  <td height="25" class="body">Start Date : </td>
-                  <td width="64" height="25"><input type="date" name="start" style="width:155px;" value="dd/MM/YYYY HH:mm"></td>
+                  <td height="25" class="body">Date de début : </td>
+                  <td width="64" height="25"><input type="date" name="start" style="width:200px;" value="dd/MM/YYYY HH:mm"></td>
                 </tr>
                 <tr>
-                  <td height="25" class="body">End Date : </td>
-                  <td width="64" height="25"><input type="date" name="end" style="width:155px;" value="dd/MM/YYYY HH:mm" ></td>
+                  <td height="25" class="body">Date de fin : </td>
+                  <td width="64" height="25"><input type="date" name="end" style="width:200px;" value="dd/MM/YYYY HH:mm" ></td>
                 </tr>
                 <tr>
-                  <td width="89" height="25" class="body">Reason : </td>
-				  <td height="25" colspan="2"><TEXTAREA name="nom" rows=4 cols=20 style="width:155px;">Why do you want to use this car?</TEXTAREA></td>
+                  <td width="89" height="25" class="body">Motif : </td>
+				  <td height="25" colspan="2"><TEXTAREA name="reason" rows=4 cols=20 style="height:89px;width:200px;">Pourquoi avez-vous besoin d'un véhicule?</TEXTAREA></td>
 				</tr>
 				
 				<tr>
                   <td height="25" class="body">&nbsp;</td>
                   <td height="35" colspan="2" class="body">
 				  <div align="right" style="padding-right:6px;">
-                    <button onclick="return confirm('Are you sure you want to book this car ?');">book</button>
+                    <button >Voir les véhicules disponibles</button>
 				  </div>
 				  </td>
                 </tr>

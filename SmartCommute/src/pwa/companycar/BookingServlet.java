@@ -2,25 +2,18 @@ package pwa.companycar;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Locale;
 import java.util.Date;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.RequestDispatcher;
 
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
-
-
-
-import pwa.sncf.SncfGare;
 
 /**
  * Servlet implementation class BookingServlet
@@ -77,10 +70,11 @@ public class BookingServlet extends HttpServlet {
 			
 		}
 		else if("addbooking".equals(request.getParameter("action"))){
-			SimpleDateFormat df=new SimpleDateFormat("YYYYMMDD-HHmm", Locale.getDefault());
 			try{
-				Date start=df.parse(request.getParameter("start"));
-				Date end=df.parse(request.getParameter("end"));
+				logger.info("start (string)="+request.getParameter("start")+"\n");
+				logger.info("end (string)="+request.getParameter("end"));
+				Date start=this.extractDateTimeFrom(request.getParameter("start"));
+				Date end=this.extractDateTimeFrom(request.getParameter("end"));
 				if(end.after(start)){
 					Car C=carManager.getCar(request.getParameter("id"));
 					if(C==null)response.getWriter().append("Le véhicule n'existe pas");	
@@ -89,9 +83,10 @@ public class BookingServlet extends HttpServlet {
 						else{
 							try{
 								bookingManager.create(request.getParameter("name"), C,start, end, request.getParameter("reason"), request.getRemoteAddr());
-								response.sendRedirect("booking?action=listbookings");
+								response.sendRedirect("home");
 							}catch(Exception e){
 								response.getWriter().append("Impossible d'ajouter cette réservation (Vérifier les données");
+								e.printStackTrace();
 							}
 						}
 					}
@@ -103,39 +98,25 @@ public class BookingServlet extends HttpServlet {
 		}
 		else if("listavailablecars".equals(request.getParameter("action"))){
 			if(request.getParameter("start")!=null && request.getParameter("end")!=null){
-			
-			SimpleDateFormat df=new SimpleDateFormat("dd/MM/YYYY HH:mm");
-			try{
-				//Date start=df.parse(request.getParameter("start"));
-				//Date end=df.parse(request.getParameter("end"));
-				String startdate=request.getParameter("start").substring(0, request.getParameter("start").indexOf(" "));
-				int starttimehour=Integer.parseInt(request.getParameter("start").substring(request.getParameter("start").indexOf(" ")+1,request.getParameter("start").indexOf(":")));
-				int starttimemin=Integer.parseInt(request.getParameter("start").substring(request.getParameter("start").indexOf(":")+1));
-				String enddate=request.getParameter("end").substring(0, request.getParameter("end").indexOf(" "));
-				int endtimehour=Integer.parseInt(request.getParameter("end").substring(request.getParameter("end").indexOf(" ")+1,request.getParameter("end").indexOf(":")));
-				int endtimemin=Integer.parseInt(request.getParameter("end").substring(request.getParameter("end").indexOf(":")+1));
-				logger.info("startdate "+startdate+ " /time="+starttimehour+"+"+starttimemin+"\n");
-				logger.info("enddate="+enddate+ " /time="+endtimehour+"+"+endtimemin+"\n");
-				Date start=DateFormat.getDateInstance(DateFormat.SHORT).parse(startdate);
-				start.setTime(start.getTime()+((starttimehour*60)+starttimemin)*(60*1000));
-				Date end=DateFormat.getDateInstance(DateFormat.SHORT).parse(enddate);
-				end.setTime(end.getTime()+((endtimehour*60)+endtimemin)*(60*1000));
-				if(end.after(start)){
-					response.getWriter().append("Liste des véhicules dispo entre "+start+" et "+end+"\n");
-					List<Car> list=carManager.getAvailableCars(start, end);
-					for(Car C:list){
-						response.getWriter().append(C+"\n");
+				dispatcher =this.getServletContext().getRequestDispatcher("/WEB-INF/views/CarsToBook.jsp");
+				try{
+					Date start=this.extractDateTimeFrom(request.getParameter("start"));
+					Date end=this.extractDateTimeFrom(request.getParameter("end"));
+					if(end.after(start)){	
+						List<Car> list=carManager.getAvailableCars(start, end);
+						request.setAttribute("availablecars",list);
+
+					}else{
+						response.getWriter().append("Dates incorrectes: "+start+" - "+end);
+						request.setAttribute("dateerror",Boolean.TRUE);
 					}
-				}else response.getWriter().append("Dates incorrectes: "+start+" - "+end);
-				
-			}catch(ParseException e){
-				response.getWriter().append("Dates incorrectes");
-				e.printStackTrace();
-			}
-			catch(Exception e){
-				
-				e.printStackTrace();
-			}
+
+				}catch(ParseException e){
+					response.getWriter().append("Dates incorrectes");
+					request.setAttribute("dateerror",Boolean.TRUE);
+					e.printStackTrace();
+				}
+				dispatcher.forward(request, response);
 			}else{
 				List<Car> list=carManager.getCurrentAvailableCars();
 				for(Car C:list){
@@ -165,6 +146,18 @@ public class BookingServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	
+	
+	protected Date extractDateTimeFrom(String datetime) throws ParseException{
+		//Pattern is "dd/MM/YYYY HH:mm"
+		String day=datetime.substring(0, datetime.indexOf(" "));
+		int timehour=Integer.parseInt(datetime.substring(datetime.indexOf(" ")+1,datetime.indexOf(":")));
+		int timemin=Integer.parseInt(datetime.substring(datetime.indexOf(":")+1));
+		logger.info("date "+day+ " /time="+timehour+"+"+timemin+"\n");
+		Date date=DateFormat.getDateInstance(DateFormat.SHORT).parse(day);
+		date.setTime(date.getTime()+((timehour*60)+timemin)*(60*1000));
+		return date;
 	}
 
 }

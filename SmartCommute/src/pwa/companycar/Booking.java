@@ -2,9 +2,15 @@ package pwa.companycar;
 
 import java.util.Date;
 
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import util.HibernateUtil;
+
 public class Booking {
 	private Long id;
-	private String carID;
+	private Car car;
 	private String name;
 	private Date start_time;
 	private Date end_time;
@@ -23,13 +29,13 @@ public class Booking {
 		this.id = id;
 	}
 
-	/*public String getCarID() {
-		return carID;
+	public Car getCar() {
+		return car;
 	}
 
-	public void setCarID(String carID) {
-		this.carID = carID;
-	}*/
+	public void setCar(Car car) {
+		this.car = car;
+	}
 
 	public String getName() {
 		return name;
@@ -97,7 +103,11 @@ public class Booking {
 	};
 
 	public String toString(){
-		String S=this.carID+" pour "+this.name+" du "+this.start_time+" au "+this.end_time;
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction T = session.beginTransaction();
+		Hibernate.initialize(this.car);
+		String S=car.getImmatriculation()+" "+car.getDescription()+" pour "+this.name+" du "+this.start_time+" au "+this.end_time;
+		T.commit();
 		return S;
 	}
 }
